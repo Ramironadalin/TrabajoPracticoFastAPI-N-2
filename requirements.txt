@@ -1,0 +1,6 @@
+fastapi
+sqlmodel
+uvicorn
+pytest
+pytest-cov
+httpx
