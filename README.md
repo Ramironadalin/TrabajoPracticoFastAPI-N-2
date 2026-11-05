@@ -6,12 +6,13 @@ API REST para gestionar el catálogo de una biblioteca y sus préstamos.
 
 ```
 app/
-  main.py          # app FastAPI + traducción de errores de dominio a HTTP
-  database.py      # engine y sesión (SQLite por defecto)
-  dependencies.py  # get_hoy(): fecha actual inyectable (facilita testear multas)
-  models/          # tablas SQLModel y schemas (Create / Update / Read)
-  routers/         # capa HTTP: solo parsea, delega y responde
-  services/        # lógica y reglas de negocio (sin dependencia de FastAPI)
+  main.py          # app FastAPI + traducción de excepciones a HTTP
+  database.py      # conexión y sesión de la base de datos (SQLite por defecto)
+  dependencies.py  # dependencias inyectables (get_hoy)
+  exceptions.py    # excepciones de dominio (NoEncontrado, Conflicto, Prohibido)
+  models/          # Clases (entidades de la base de datos)
+  routers/         # Rutas (API, endpoints)
+  services/        # Lógica de negocio (CRUD y reglas de negocio)
 tests/             # pytest con SQLite en memoria
 ```
 
@@ -42,7 +43,7 @@ Usa una base SQLite en memoria (no toca `biblioteca.db`) y muestra la cobertura
 | POST/GET | `/autores`, `/libros`, `/socios` | Alta y listado |
 | GET/PATCH/DELETE | `/autores/{id}`, `/libros/{id}`, `/socios/{id}` | Consulta, modificación parcial y baja |
 | POST | `/libros/{id}/autores/{autor_id}` | Asocia un autor a un libro |
-| GET | `/libros?disponibles=true` | Libros con stock > 0 |
+| GET | `/libros?disponibles=true` | Filtra por stock (`true`: con stock, `false`: agotados) |
 | POST | `/prestamos` | Registra un préstamo (`{"socio_id", "libro_id"}`) |
 | GET | `/prestamos` | Lista los préstamos (solo activos si `activos=true`) |
 | GET | `/prestamos/{id}` | Consulta un préstamo |

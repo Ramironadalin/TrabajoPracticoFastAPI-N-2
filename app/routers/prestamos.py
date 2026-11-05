@@ -5,8 +5,8 @@ from sqlmodel import Session
 
 from ..database import get_session
 from ..dependencies import get_hoy
-from ..models import Prestamo, PrestamoCreate, PrestamoRead
-from ..services import catalogo, prestamos
+from ..models import PrestamoCreate, PrestamoRead
+from ..services import prestamos
 
 router = APIRouter(prefix="/prestamos", tags=["prestamos"])
 
@@ -27,7 +27,7 @@ def listar_prestamos(activos: bool = False, session: Session = Depends(get_sessi
 
 @router.get("/{prestamo_id}", response_model=PrestamoRead)
 def obtener_prestamo(prestamo_id: int, session: Session = Depends(get_session)):
-    return catalogo.obtener(session, Prestamo, prestamo_id)
+    return prestamos.obtener_prestamo(session, prestamo_id)
 
 
 @router.post("/{prestamo_id}/devolucion", response_model=PrestamoRead)
