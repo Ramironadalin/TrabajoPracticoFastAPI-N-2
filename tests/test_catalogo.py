@@ -70,8 +70,10 @@ def test_listar_libros_disponibles(client, crear_libro):
     crear_libro(isbn="2", stock=0)
     todos = client.get("/libros").json()
     disponibles = client.get("/libros?disponibles=true").json()
+    no_disponibles = client.get("/libros?disponibles=false").json()
     assert len(todos) == 2
     assert [l["isbn"] for l in disponibles] == ["1"]
+    assert [l["isbn"] for l in no_disponibles] == ["2"]
 
 
 # ---------- Socios ----------

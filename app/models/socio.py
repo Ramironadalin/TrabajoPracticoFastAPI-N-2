@@ -18,7 +18,17 @@ class Socio(SocioBase, table=True):
 
 
 class SocioCreate(SocioBase):
-    pass
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "nombre": "Juan Pérez",                    
+                    "email": "TuCorreo@example.com",
+                    "activo": True,
+                }
+            ]
+        }
+    }
 
 
 class SocioUpdate(SQLModel):

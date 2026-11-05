@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from .database import crear_tablas
+from .exceptions import Conflicto, ErrorDominio, NoEncontrado, Prohibido
 from .routers import autores, libros, prestamos, socios
-from .services.errors import Conflicto, ErrorDominio, NoEncontrado, Prohibido
 
 CODIGOS = {NoEncontrado: 404, Conflicto: 409, Prohibido: 403}
 
@@ -18,6 +18,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Biblioteca", lifespan=lifespan)
 
+@app.get("/", include_in_schema=False)
+def raiz():  # pragma: no cover
+    return RedirectResponse(url="/docs")
 
 @app.exception_handler(ErrorDominio)
 async def manejar_error_dominio(request: Request, exc: ErrorDominio):
